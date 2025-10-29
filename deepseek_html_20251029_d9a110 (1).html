@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Kamila</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .page {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 800px;
+            padding: 40px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+            animation: fadeIn 1s ease;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        h1 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            font-size: 2.5rem;
+        }
+        
+        h2 {
+            color: #e91e63;
+            margin-bottom: 20px;
+            font-size: 2rem;
+        }
+        
+        p {
+            line-height: 1.6;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+        
+        .birthday-form {
+            margin: 30px 0;
+        }
+        
+        .birthday-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        select, input {
+            padding: 12px;
+            border: 2px solid #ff9a9e;
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: white;
+        }
+        
+        button {
+            background: linear-gradient(to right, #e91e63, #ff9a9e);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 10px;
+        }
+        
+        button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .error-message {
+            color: #e91e63;
+            margin-top: 15px;
+            font-weight: bold;
+            display: none;
+        }
+        
+        .heart {
+            display: inline-block;
+            font-size: 2rem;
+            color: #e91e63;
+            animation: heartbeat 1.5s infinite;
+        }
+        
+        .reasons-container {
+            max-height: 500px;
+            overflow-y: auto;
+            padding: 20px;
+            background-color: rgba(255, 154, 158, 0.1);
+            border-radius: 15px;
+            margin: 20px 0;
+            text-align: left;
+        }
+        
+        .reason-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed #ff9a9e;
+        }
+        
+        .options {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .question-container {
+            margin: 30px 0;
+        }
+        
+        .answer-input {
+            padding: 12px;
+            border: 2px solid #ff9a9e;
+            border-radius: 10px;
+            font-size: 1rem;
+            width: 200px;
+            margin-right: 10px;
+        }
+        
+        .letter-scene {
+            position: relative;
+            height: 500px;
+            margin: 30px 0;
+        }
+        
+        .letter-box {
+            position: absolute;
+            bottom: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 300px;
+            height: 200px;
+            background-color: #fff9c4;
+            border: 2px solid #ffd54f;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .letter-box:hover {
+            transform: translateX(-50%) scale(1.05);
+        }
+        
+        .key {
+            position: absolute;
+            top: 50px;
+            right: 100px;
+            width: 50px;
+            height: 50px;
+            background-color: #d7ccc8;
+            border-radius: 5px;
+            cursor: grab;
+            transition: transform 0.3s;
+        }
+        
+        .key-hole {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 20px;
+            height: 20px;
+            background-color: #5d4037;
+            border-radius: 50%;
+        }
+        
+        .letter-content {
+            display: none;
+            padding: 30px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            text-align: left;
+            line-height: 1.8;
+            font-style: italic;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        .shake {
+            animation: shake 0.5s;
+        }
+        
+        .success {
+            color: #4caf50;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        @media (max-width: 600px) {
+            .page {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            h2 {
+                font-size: 1.5rem;
+            }
+            
+            .birthday-input {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .letter-scene {
+                height: 400px;
+            }
+            
+            .key {
+                right: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Page 1: Birthday Verification -->
+    <div id="page1" class="page active">
+        <h1>For My Dearest Kamila</h1>
+        <p>Before we begin this special journey, I need to verify something very important...</p>
+        
+        <div class="birthday-form">
+            <h2>When is your birthday?</h2>
+            <div class="birthday-input">
+                <select id="year">
+                    <option value="">Year</option>
+                    <!-- Years will be populated by JavaScript -->
+                </select>
+                <select id="month">
+                    <option value="">Month</option>
+                    <option value="0">January</option>
+                    <option value="1">February</option>
+                    <option value="2">March</option>
+                    <option value="3">April</option>
+                    <option value="4">May</option>
+                    <option value="5">June</option>
+                    <option value="6">July</option>
+                    <option value="7">August</option>
+                    <option value="8">September</option>
+                    <option value="9">October</option>
+                    <option value="10">November</option>
+                    <option value="11">December</option>
+                </select>
+                <select id="day">
+                    <option value="">Day</option>
+                    <!-- Days will be populated by JavaScript -->
+                </select>
+            </div>
+            <button id="verify-birthday">Verify</button>
+            <div id="birthday-error" class="error-message">
+                <span class="heart">❤</span> That's not your birthday! Try again. <span class="heart">❤</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Page 2: Reasons I Love You -->
+    <div id="page2" class="page">
+        <h1>Why I Love You, Kamila</h1>
+        <p>Here are just a few of the countless reasons why you mean so much to me...</p>
+        
+        <div class="reasons-container" id="reasons-list">
+            <!-- Reasons will be populated by JavaScript -->
+        </div>
+        
+        <div class="options">
+            <button id="read-all">I read all of these</button>
+            <button id="not-read">I know you didn't read all, go and read first</button>
+        </div>
+    </div>
+    
+    <!-- Page 3: Question -->
+    <div id="page3" class="page">
+        <h1>A Simple Question</h1>
+        
+        <div class="question-container">
+            <h2>Do you like Nisal?</h2>
+            <input type="text" id="answer-input" class="answer-input" placeholder="Type your answer...">
+            <button id="submit-answer">Submit</button>
+            <div id="answer-error" class="error-message">
+                Kamila, you must type "yes"!
+            </div>
+            <div id="answer-success" class="success">
+                Thank you! Let's continue...
+            </div>
+        </div>
+    </div>
+    
+    <!-- Page 4: Letter -->
+    <div id="page4" class="page">
+        <h1>A Special Letter For You</h1>
+        <p>Drag the key to the letter to unlock my message for you...</p>
+        
+        <div class="letter-scene">
+            <div class="key" id="key" draggable="true">
+                <div class="key-hole"></div>
+            </div>
+            <div class="letter-box" id="letter-box">
+                <p>Click or drag key to open</p>
+            </div>
+        </div>
+        
+        <div class="letter-content" id="letter-content">
+            <h3>My Dearest Kamila,</h3>
+            <p>I also love you so much more than you think.. I don't know how to express that to you.. I'm scared and a little bit nervous.. but you need to know I love you so much...</p>
+            <p style="text-align: right; margin-top: 20px;">With all my love,<br>Nisal</p>
+        </div>
+    </div>
+
+    <script>
+        // Page navigation
+        const pages = document.querySelectorAll('.page');
+        
+        function showPage(pageId) {
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+        
+        // Page 1: Birthday Verification
+        const yearSelect = document.getElementById('year');
+        const monthSelect = document.getElementById('month');
+        const daySelect = document.getElementById('day');
+        const verifyBtn = document.getElementById('verify-birthday');
+        const birthdayError = document.getElementById('birthday-error');
+        
+        // Populate years (1980-2010)
+        for (let year = 1980; year <= 2010; year++) {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearSelect.appendChild(option);
+        }
+        
+        // Populate days (1-31)
+        for (let day = 1; day <= 31; day++) {
+            const option = document.createElement('option');
+            option.value = day;
+            option.textContent = day;
+            daySelect.appendChild(option);
+        }
+        
+        verifyBtn.addEventListener('click', function() {
+            const year = yearSelect.value;
+            const month = monthSelect.value;
+            const day = daySelect.value;
+            
+            // Correct birthday: February 11, 2005
+            if (year === "2005" && month === "1" && day === "11") {
+                showPage('page2');
+            } else {
+                birthdayError.style.display = 'block';
+                document.querySelector('.birthday-form').classList.add('shake');
+                setTimeout(() => {
+                    document.querySelector('.birthday-form').classList.remove('shake');
+                }, 500);
+            }
+        });
+        
+        // Page 2: Reasons I Love You
+        const reasonsList = document.getElementById('reasons-list');
+        const readAllBtn = document.getElementById('read-all');
+        const notReadBtn = document.getElementById('not-read');
+        
+        // List of reasons (truncated for brevity in this example)
+        const reasons = [
+            "I love the way you look at me.",
+            "You make me feel like I'm the only person in the world.",
+            "With you I can be myself.",
+            "I love you because we are family and friends at the same time.",
+            "When we're together, all my problems disappear.",
+            "You make my heart smile.",
+            "You know me better than I know myself.",
+            "You are always willing to help me accomplish my goals.",
+            "You have the smoothest skin.",
+            "I could spend hours just watching and caressing it.",
+            "You make me smile when nobody else can.",
+            "You have taught me the true meaning of love.",
+            "Because I miss you… even when you're in the next room.",
+            "Because when I'm hurt, you help clean me up and bandage me and kiss and make it better.",
+            "You're always there for me, no matter what.",
+            "I love when we walk down the street in the rain, and you hold the umbrella above me so I don't get wet.",
+            "You let me be myself and you encourage me to find more of myself.",
+            "You are truthful and vulnerable with me.",
+            "You encourage me after I feel like I've failed.",
+            "You make me feel like I can get through anything, as long as I have you.",
+            "You sacrifice and work so hard, without even realizing that you are.",
+            "You love my family, even though they're crazy!",
+            "You take care of me and spoil me when I'm sick.",
+            "You always make time for just the two of us.",
+            "Because you are determined to make this relationship work.",
+            "Because you help me see negative things differently.",
+            "Because when you laugh it makes me laugh!",
+            "We understand each other so well.",
+            "Your arms feel more like home than any house ever did.",
+            "You have an inner strength that helps keep me calm when my life is in chaos.",
+            "You always keep your promises.",
+            "You help me understand technology, without being condescending.",
+            "You have the ability to comfort me simply by your touch.",
+            "You always apologize first, no matter who's wrong.",
+            "Because you are so sexy and I can't believe I get to call you mine.",
+            "Because you always swap the wet towels for dry ones when you know I'm showering after you.",
+            "Because when things don't go as planned, you roll with it, instead of getting stressed.",
+            "You always believe in me and inspire me.",
+            "I can always talk to you.",
+            "You give me massages.",
+            "Because I can see how much you love being there for me.",
+            "I love you because you picked me.",
+            "Your eyes smile when you laugh.",
+            "You kiss me goodbye when I'm still asleep in the morning.",
+            "You let me pick the movie.",
+            "You are sweeter than my favorite dessert.",
+            "You love me even when I'm being horrible and hard to be around.",
+            "Because you always treat everyone well.",
+            "We're so different and yet so the same.",
+            "You are doing everything to become a better person for yourself and for us.",
+            "You make an effort with my friends and family, because you know how much they mean to me.",
+            "I love how you put so much thought into everything you do for me.",
+            "You have an innate ability to protect and take care of me.",
+            "I love you because you gave me the gift of yourself.",
+            "You make me a better person.",
+            "I love you every time you reach across our bed to pull me close to you.",
+            "Because you make me feel special.",
+            "You have a gentle and calming voice that soothes me when I'm upset.",
+            "The day I met you, I found my missing piece.",
+            "Because I can be myself around you.",
+            "Because you trust me unconditionally.",
+            "You are always pushing me to be better and my biggest fan in all that I do.",
+            "You make all of my dreams come true, no matter how small they are.",
+            "You make me laugh so hard that I spit my drink out!",
+            "Your willingness always to try new things make my life full of adventures.",
+            "You are always kind to other people, even if they don't deserve it.",
+            "Because I can't imagine life without you.",
+            "You know the secret, little things that cheer me up and make me happy.",
+            "You only seem to notice my strengths and always have confidence in me.",
+            "You don't just tell me you love me, you show me.",
+            "You know how to cheer me up when I'm sad.",
+            "You care deeply about my success and my happiness.",
+            "You never give up on me, even when I'm at my worst.",
+            "You turn on the seat warmer in the car for me.",
+            "You follow me and you push me.",
+            "You're smart and dedicated to your job.",
+            "You always have an idea of something fun to do.",
+            "You make me feel completely cherished and adored.",
+            "You care about the people around you.",
+            "You are patient and loving with those close to you.",
+            "You always tip.",
+            "You're always there when I need a shoulder to cry on.",
+            "You are smoking hot!",
+            "I love your snuggles.",
+            "You may not always agree with my decisions but you always trust me to make them.",
+            "I love that you ask about my day.",
+            "You have the courage to chase your dreams.",
+            "You still give me butterflies.",
+            "You tell great stories.",
+            "You are great at giving people compliments.",
+            "You're cute when you're grumpy.",
+            "I love that your hand fits perfectly with mine.",
+            "I love that I get to go through life with you.",
+            "When we go places together, you pitch in to make the trips easier and more fun.",
+            "We spend lots of time talking about decisions we need to make together.",
+            "You tell me why you love me.",
+            "You'll do my chores when you know I've had a bad day.",
+            "When I do your chores or pick up the slack around the house, you always noticed.",
+            "You are my very best friend in the whole world.",
+            "You always open the car door for me.",
+            "You make the dark a little less scary.",
+            "You're the calm in the storm.",
+            "You make me feel so safe.",
+            "I love how you're able to make me laugh, even when the situation shouldn't be funny.",
+            "You are everything I never knew I needed.",
+            "I love that you let me cuddle up REALLY close to you… even when you're overheating.",
+            "You hold my hand in movies.",
+            "When you're a guest in someone's home you always eat what they've prepared, even if you're not a huge fan.",
+            "You give up your seat for the elderly.",
+            "You're not afraid to be silly with me.",
+            "You're always saving funny memes on your phone to show me later because you want me to laugh too.",
+            "I love that you make my fears melt away.",
+            "When you talk to people you're focused on them.",
+            "You put other's needs before your own.",
+            "Your kisses make me weak in the knees.",
+            "I love that you take care of me when I forget to.",
+            "You're always doing little, creative things to let me know you care.",
+            "You wake up with a smile in the morning.",
+            "You know when to help and when to let me do it myself.",
+            "You always carry heavy bags for me.",
+            "You're a great person to talk decisions over with.",
+            "You don't tell me what I should do but you give me great feedback and listen.",
+            "You love cheese as much as I do!",
+            "You'll pick up food on the way home.",
+            "People look up to you and you never let them down.",
+            "You don't change depending on who you're with.",
+            "You make me laugh, even when I feel like crying.",
+            "You stand up for the stupidest things sometimes."
+        ];
+        
+        // Populate reasons list
+        reasons.forEach((reason, index) => {
+            const reasonItem = document.createElement('div');
+            reasonItem.className = 'reason-item';
+            reasonItem.innerHTML = `<strong>${index + 1}.</strong> ${reason}`;
+            reasonsList.appendChild(reasonItem);
+        });
+        
+        readAllBtn.addEventListener('click', function() {
+            showPage('page3');
+        });
+        
+        notReadBtn.addEventListener('click', function() {
+            reasonsList.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // Page 3: Question
+        const answerInput = document.getElementById('answer-input');
+        const submitAnswerBtn = document.getElementById('submit-answer');
+        const answerError = document.getElementById('answer-error');
+        const answerSuccess = document.getElementById('answer-success');
+        
+        submitAnswerBtn.addEventListener('click', function() {
+            if (answerInput.value.toLowerCase() === 'yes') {
+                answerError.style.display = 'none';
+                answerSuccess.style.display = 'block';
+                setTimeout(() => {
+                    showPage('page4');
+                }, 1500);
+            } else {
+                answerError.style.display = 'block';
+                answerInput.classList.add('shake');
+                setTimeout(() => {
+                    answerInput.classList.remove('shake');
+                }, 500);
+            }
+        });
+        
+        // Page 4: Letter
+        const key = document.getElementById('key');
+        const letterBox = document.getElementById('letter-box');
+        const letterContent = document.getElementById('letter-content');
+        
+        let isDragging = false;
+        
+        key.addEventListener('dragstart', function(e) {
+            isDragging = true;
+            e.dataTransfer.setData('text/plain', 'key');
+        });
+        
+        letterBox.addEventListener('dragover', function(e) {
+            e.preventDefault();
+        });
+        
+        letterBox.addEventListener('drop', function(e) {
+            e.preventDefault();
+            if (isDragging) {
+                openLetter();
+            }
+        });
+        
+        letterBox.addEventListener('click', function() {
+            openLetter();
+        });
+        
+        function openLetter() {
+            letterBox.style.display = 'none';
+            key.style.display = 'none';
+            letterContent.style.display = 'block';
+            letterContent.style.animation = 'fadeIn 2s ease';
+        }
+    </script>
+</body>
+</html>
